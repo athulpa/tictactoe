@@ -19,6 +19,7 @@ class TicTacToeBoard:
         
         self.nextTurn = self.Xmark
         
+        self.moveHistory = list()
     
     WinPatterns = [
                     slice(0,3),         # row 1
@@ -57,6 +58,7 @@ class TicTacToeBoard:
             #self.board[pos//3, pos%3] = self.nextTurn
             
             self.changeTurn()
+            self.moveHistory.append(pos)
             
         except (TypeError,IndexError,ValueError):
             msg = "In call to move(), pos must be an integer in [0,8]. Received '{}'"
@@ -70,9 +72,16 @@ class TicTacToeBoard:
             raise ValueError(msg)
             
         
+    def undoLastMove(self):
+        lpos = self.moveHistory.pop()
+        self.board[lpos] = 0
+        self.changeTurn()
+        
+        
     # Returns a list of all possible next moves
     def possibleNextMoves(self):
-        self.board.nonzero()[0]
+        ret = np.nonzero(self.board==0)[0]
+        return ret[0]
         
     # Updates whose turn it is
     def changeTurn(self):
