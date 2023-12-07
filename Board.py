@@ -85,4 +85,4 @@ class TicTacToeBoard:
         
     # Updates whose turn it is
     def changeTurn(self):
-        self.turn = self.Xmark if(self.turn==self.Ymark) else self.Ymark
+        self.nextTurn = self.Xmark if(self.nextTurn==self.Ymark) else self.Ymark
