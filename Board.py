@@ -36,8 +36,8 @@ class TicTacToeBoard:
                     slice(3,6),         # row 2
                     slice(6,9),         # row 3
                     slice(0,9,3),       # col 1
-                    slice(0,9,3),       # col 1
-                    slice(0,9,3),       # col 1
+                    slice(1,9,3),       # col 2
+                    slice(2,9,3),       # col 3
                     np.array((0,4,8)),  # diag 1
                     np.array((2,4,6))   # diag 2
                   ]
