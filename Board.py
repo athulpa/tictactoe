@@ -12,6 +12,14 @@ import numpy as np
 class TicTacToeBoard:
     
     def __init__(self, **kwargs):
+        if('copyFrom' in kwargs.keys()):
+            other = kwargs['copyFrom']
+            self.board = other.board[:]
+            (self.Xmark, self.Ymark) = (other.Xmark, other.Ymark)
+            self.nextTurn = other.nextTurn
+            self.moveHistory = other.moveHistory[:]
+            return    
+        
         self.board = np.zeros(shape=(9,), dtype=np.uint8)
         
         self.Xmark = 1
@@ -20,6 +28,8 @@ class TicTacToeBoard:
         self.nextTurn = self.Xmark
         
         self.moveHistory = list()
+    
+    
     
     WinPatterns = [
                     slice(0,3),         # row 1
@@ -31,6 +41,7 @@ class TicTacToeBoard:
                     np.array((0,4,8)),  # diag 1
                     np.array((2,4,6))   # diag 2
                   ]
+    
     
     # If the position is illegal (i.e. more than 1 3-in-a-row reached),
     # ... then return value may be either player.
@@ -87,7 +98,12 @@ class TicTacToeBoard:
     def changeTurn(self):
         self.nextTurn = self.Xmark if(self.nextTurn==self.Ymark) else self.Ymark
         
-        
+    
+    # Returns the other player w.r.t self.nextTurn
+    def getOtherMark(self):
+        return (self.Ymark if(self.nextTurn==self.Xmark) else self.Xmark)
+    
+    
     def __repr__(self):
         ret = ''
         for i in range(3):
