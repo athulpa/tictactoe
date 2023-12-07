@@ -3,40 +3,41 @@ import numpy as np
 from Board import TicTacToeBoard
 
 
-# returns which next moves lead to: X will win, Y will win, other
+
+# returns which next moves lead to: will win, will lose, other
 # returned value is an array of 9 elements where:
-    # arr[i] = X,       if playing position 'i' will lead to Y eventually winning.
-    # arr[i] = Y,       if playing position 'i' will lead to Y eventually winning.
-    # arr[i] = X+Y+1,   if playing position 'i' is an illegal move (it's already filled with X or 0)
-    # arr[i] = X+Y+3,   if playing position 'i' will lead to open-ended result
-def minimax(tb:TicTacToeBoard) -> (list,list,list):
-    (X,Y) = (tb.Xmark, tb.Ymark)
+    # arr[i] = 1,       if playing position 'i' will lead to a forced win.
+    # arr[i] = -1,       if playing position 'i' will lead to a loss with best play from opponent
+    # arr[i] = 8,   if playing position 'i' is an illegal move (it's already filled with X or 0)
+    # arr[i] = 0,   if playing position 'i' will lead to open-ended result
+def minimax(tb:TicTacToeBoard, myMark, otherMark):
+    #assert myMark == tb.nextTurn
     
-    ret = np.zeros(9,dtype=np.uint8)
-    ret[:] = (X + Y + 1)
+    ret  = np.zeros(9, dtype=np.int8)
+    ret[:] = 8
     
     nextMoves = tb.possibleNextMoves()
     
-    for pos in nextMoves:
+    for mv in nextMoves:
+        #l = len(tb.moveHistory)
+        tb.move(mv)
         
-        tb.move(pos)
-        
-        winVal = tb.checkWin()
-        if(winVal==X):
-            ret[pos] = X
-        elif(winVal==Y):
-            ret[pos] = Y
+        if(tb.checkWin()==myMark):
+            ret[mv] = 1
         else:
             remMoves = tb.possibleNextMoves()
             if(remMoves.size>0):
-                z = minimax(tb)
-                if((z[remMoves]==X).all()):
-                    ret[pos] = X
-                elif((z[remMoves]==Y).all()):
-                    ret[pos] = Y
+                Z = minimax(tb, myMark = otherMark, otherMark = myMark)
+                if(np.any(Z[remMoves]==1)):
+                    ret[mv] = -1
+                elif(np.all(Z[remMoves]==-1)):
+                    ret[mv] = 1
                 else:
-                    ret[pos] = (X + Y + 3)
+                    ret[mv] = 0
             else:
-                ret[pos] = (X + Y + 3)
-        
+                ret[mv] = 0
         tb.undoLastMove()
+        #assert len(tb.moveHistory)==l
+        
+    return ret
+
