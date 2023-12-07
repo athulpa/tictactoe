@@ -41,3 +41,22 @@ def minimax(tb:TicTacToeBoard, myMark, otherMark):
         
     return ret
 
+
+# Show for each of the remaining moves, what result it'll lead to with best play
+# Calls minimax() internally
+def showCalc(tb:TicTacToeBoard):
+    orig = tb
+    tb = TicTacToeBoard(copyFrom=orig)
+    
+    res = minimax(tb, tb.nextTurn, tb.getOtherMark())
+    
+    LUT = {1:'W', -1:'L', 0:'0'}
+    ret = str(tb.nextTurn) + " to move:\n"
+    for i in range(3):
+        for j in range(3):
+            k = 3*i + j
+            ret += ' '
+            ret += (str(tb.board[k]) if(tb.board[k]!=0) else LUT[res[k]])
+        ret += '\n'
+        
+    print(ret)
