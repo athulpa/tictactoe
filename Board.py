@@ -43,6 +43,8 @@ class TicTacToeBoard:
                   ]
     
     
+    # Checks if anyone has won the game.
+    # Returns Xmark/Ymark if either player won, otherwise returns 0.
     # If the position is illegal (i.e. more than 1 3-in-a-row reached),
     # ... then return value may be either player.
     def checkWin(self):
