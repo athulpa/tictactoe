@@ -81,8 +81,17 @@ class TicTacToeBoard:
     # Returns a list of all possible next moves
     def possibleNextMoves(self):
         ret = np.nonzero(self.board==0)[0]
-        return ret[0]
+        return ret
         
     # Updates whose turn it is
     def changeTurn(self):
         self.nextTurn = self.Xmark if(self.nextTurn==self.Ymark) else self.Ymark
+        
+        
+    def __repr__(self):
+        ret = ''
+        for i in range(3):
+            for j in range(3):
+                ret += ' ' + str(self.board[3*i + j])
+            ret += '\n'
+        return ret
