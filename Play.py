@@ -7,7 +7,12 @@ def startSimpleGame():
     eng = TicTacToeEngine()
     tb = TicTacToeBoard()
     
-    p1,p2 = welcomeScreen()
+    rsp = welcomeScreen()
+    if(rsp==-1):
+        print("\nExiting ...\n")
+        return
+    else:
+        (p1,p2) = rsp
 
     print("\n\nLET'S BEGIN!\n")
     
@@ -41,7 +46,7 @@ def startSimpleGame():
 
 
 
-def welcomeScreen():
+def welcomeScreen(enableQuit=True):
     print("\nWELCOME TO TICTACTOE\n\n")
     print("The first player plays 'X' and moves first.\nThe second player plays 'O'.")
     
@@ -50,6 +55,8 @@ def welcomeScreen():
         cnt += 1
         r1 = input("\nWho plays first? ('u' for user and 'c' for computer): ")
         r1 = r1.strip().lower()
+        if(enableQuit is True and r1=='q'):
+            return -1
         if(r1 == 'u' or r1=='c'):
             break
         else:
@@ -61,6 +68,8 @@ def welcomeScreen():
         cnt += 1
         r2 = input("\nWho plays second? ('u' for user and 'c' for computer): ")
         r2 = r2.strip().lower()
+        if(enableQuit is True and r2=='q'):
+            return -1
         if(r2 == 'u' or r2=='c'):
             break
         else:
