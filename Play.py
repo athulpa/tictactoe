@@ -85,7 +85,7 @@ def welcomeScreen(enableQuit=True):
         r2 = r2.strip().lower()
         if(enableQuit is True and r2=='q'):
             return -1
-        if(r2 == 'u' or r2=='c'):
+        if(r2=='u' or r2=='c'):
             break
         else:
             print("Invalid Input. You must enter either 'u' or 'c'.")
@@ -110,7 +110,8 @@ def getInputMove(tb, enableQuit=True):
             assert ((len(nums)==2) and (nums[0] in range(1,4)) and (nums[1] in range(1,4)))
             ret = 3*(nums[0]-1) + (nums[1]-1)
         except (AssertionError, ValueError, TypeError):
-            print("\n\nInvalid Input. Try again({})\n".format(cnt))
+            print("\nInvalid Input. Expected format: row-index <SPACE> column-index")
+            print("Try again({})\n\n".format(cnt))
             continue
         else:
             if(tb.board[ret]==0):
