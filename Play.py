@@ -26,7 +26,7 @@ def startSimpleGame():
             if(mv==-1):
                 break
         else:
-            _ = input("Computer's turn, press ENTER to continue ...")
+            _ = input("It's the Computer's turn. Press ENTER to continue ...")
             mv = eng.bestMove(tb, separateEqualsBy='random')
             print("\nThe computer makes a move at ({}, {})".format(mv//3+1, mv%3+1))
         
@@ -48,7 +48,22 @@ def startSimpleGame():
 
 def welcomeScreen(enableQuit=True):
     print("\nWELCOME TO TICTACTOE\n\n")
+    print("PLAYER RULES")
     print("The first player plays 'X' and moves first.\nThe second player plays 'O'.")
+    print()
+    print()
+    print("BOARD RULES")
+    print("The game will be played on a 3x3 board.")
+    print("Each cell has numbered co-ordinates of the form (row number, column number).")
+    print("Rows are numbered 1-3 from top to bottom; columns are numbered 1-3 from left to right.")
+    print("For instance, (1,1) is the top-left cell and (2,3) is the middle-right cell.")
+    print()
+    print()
+    print("To quit, type 'q' when asked for any input.")
+    print()
+    print()
+    _ = input("Press ENTER to continue ...")
+    print()
     
     cnt = 0
     while(True):
@@ -87,7 +102,7 @@ def getInputMove(tb, enableQuit=True):
     while(True):
         cnt += 1
         
-        inp = input("Co-ordinates for the next move? ")
+        inp = input("Co-ordinates for the next move?: ")
         if(enableQuit is True and inp.strip().lower()=='q'):
             return -1
         try:
