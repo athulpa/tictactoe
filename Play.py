@@ -148,3 +148,4 @@ def drawBoard(tb:TicTacToeBoard, Xchar='X', Ychar='O', pre='\n', end='\n'):
     
 if __name__=='__main__':
     startSimpleGame()
+    

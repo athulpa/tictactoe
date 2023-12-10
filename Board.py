@@ -48,7 +48,7 @@ class TicTacToeBoard:
     # Checks if anyone has won the game.
     # Returns Xmark/Ymark if either player won, otherwise returns 0.
     # If the position is illegal (i.e. more than 1 3-in-a-row reached),
-    # ... then return value may be either player.
+    # ... then the return value may be either player.
     def checkWin(self):
         
         # If less than 5 moves have been made => no winner.
@@ -82,7 +82,7 @@ class TicTacToeBoard:
         
         except AssertionError:
             msg = "In call to move({}), the board is already marked {} at position {}"
-            val = self.board[pos//3, pos%3]
+            val = self.board[pos]
             msg = msg.format(pos, val, pos)
             raise ValueError(msg)
             
@@ -125,7 +125,7 @@ class TicTacToeBoard:
               self.Ymark :  Ychar
               }
         
-        ret = " "
+        ret = ""
         for i in range(3):
             for j in range(3):
                 ret += " " + symbol[self.board[3*i+j]] + " |"
@@ -134,7 +134,7 @@ class TicTacToeBoard:
             else:
                 ret = ret[:-1] + '\n'
                 
-        return ret
+        print(ret)
         
         
     def __eq__(self, other):
@@ -144,4 +144,14 @@ class TicTacToeBoard:
         return ret
                 
     
-    
+
+def generateFromPosition(vec):
+    tb = TicTacToeBoard()
+    xpos = np.nonzero(vec==tb.Xmark)[0]
+    ypos = np.nonzero(vec==tb.Ymark)[0]
+    for i in range(len(ypos)):
+        tb.move(xpos[i])
+        tb.move(ypos[i])
+    if(len(xpos) > len(ypos)):
+        tb.move(xpos[i+1])
+    return tb
