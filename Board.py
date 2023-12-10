@@ -116,11 +116,32 @@ class TicTacToeBoard:
             ret += '\n'
         return ret
     
+    
+    # Pretty printing of a board
+    def show(self, Xchar='X', Ychar='O'):
+        symbol = {
+              0        :  " ",
+              self.Xmark :  Xchar,
+              self.Ymark :  Ychar
+              }
+        
+        ret = " "
+        for i in range(3):
+            for j in range(3):
+                ret += " " + symbol[self.board[3*i+j]] + " |"
+            if(i!=2):
+                ret = ret[:-1] + "\n" + "-"*11 + "\n"
+            else:
+                ret = ret[:-1] + '\n'
+                
+        return ret
+        
+        
     def __eq__(self, other):
         ret =   (self.board == other.board) and \
                 (self.nextTurn == other.nextTurn) and \
                 (self.moveHistory == other.moveHistory)
         return ret
                 
-                
-                
+    
+    
