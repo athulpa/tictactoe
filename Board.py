@@ -7,14 +7,14 @@ import numpy as np
 #                                   1 - Marked 'X'
 #                                   2 - Marked '0'
 
-# Every move is represented by an index from 0 to 8 where it should be played.
+# Every move is represented by an index from 0 to 8 where it should be played (use row-major linearization)
 
 class TicTacToeBoard:
     
     def __init__(self, **kwargs):
         if('copyFrom' in kwargs.keys()):
             other = kwargs['copyFrom']
-            self.board = other.board[:]
+            self.board = other.board.copy()
             (self.Xmark, self.Ymark) = (other.Xmark, other.Ymark)
             self.nextTurn = other.nextTurn
             self.moveHistory = other.moveHistory[:]
