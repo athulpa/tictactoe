@@ -49,3 +49,14 @@ class TicTacToeEngine:
                 rndIdx = self.rng.integers(len(candidateMoves))
                 return candidateMoves[rndIdx]
                     
+        
+    # Generate a random next move
+    def randomMove(self, tb:TicTacToeBoard):
+        candidateMoves = tb.possibleNextMoves()
+        if(len(candidateMoves)==0):
+            e = ValueError("The given board is filled in call to randomMove()")
+            raise e
+        else:
+            rndIdx = self.rng.integers(len(candidateMoves))
+            return candidateMoves[rndIdx]
+        
