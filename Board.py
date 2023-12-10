@@ -15,21 +15,22 @@ class TicTacToeBoard:
         if('copyFrom' in kwargs.keys()):
             other = kwargs['copyFrom']
             self.board = other.board.copy()
-            (self.Xmark, self.Ymark) = (other.Xmark, other.Ymark)
             self.nextTurn = other.nextTurn
             self.moveHistory = other.moveHistory[:]
             return    
         
         self.board = np.zeros(shape=(9,), dtype=np.uint8)
         
-        self.Xmark = 1
-        self.Ymark = 2
-        
         self.nextTurn = self.Xmark
         
         self.moveHistory = list()
     
-    
+
+
+#                CLASS PROPETIES
+#######################################################
+    Xmark = 1
+    Ymark = 2
     
     WinPatterns = [
                     slice(0,3),         # row 1
@@ -41,6 +42,7 @@ class TicTacToeBoard:
                     np.array((0,4,8)),  # diag 1
                     np.array((2,4,6))   # diag 2
                   ]
+#######################################################
     
     
     # Checks if anyone has won the game.
@@ -116,7 +118,6 @@ class TicTacToeBoard:
     
     def __eq__(self, other):
         ret =   (self.board == other.board) and \
-                (self.Xmark == other.Xmark) and (self.Ymark == other.Ymark) and \
                 (self.nextTurn == other.nextTurn) and \
                 (self.moveHistory == other.moveHistory)
         return ret
