@@ -113,3 +113,13 @@ class TicTacToeBoard:
                 ret += ' ' + str(self.board[3*i + j])
             ret += '\n'
         return ret
+    
+    def __eq__(self, other):
+        ret =   (self.board == other.board) and \
+                (self.Xmark == other.Xmark) and (self.Ymark == other.Ymark) and \
+                (self.nextTurn == other.nextTurn) and \
+                (self.moveHistory == other.moveHistory)
+        return ret
+                
+                
+                
