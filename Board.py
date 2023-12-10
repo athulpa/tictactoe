@@ -145,13 +145,4 @@ class TicTacToeBoard:
                 
     
 
-def generateFromPosition(vec):
-    tb = TicTacToeBoard()
-    xpos = np.nonzero(vec==tb.Xmark)[0]
-    ypos = np.nonzero(vec==tb.Ymark)[0]
-    for i in range(len(ypos)):
-        tb.move(xpos[i])
-        tb.move(ypos[i])
-    if(len(xpos) > len(ypos)):
-        tb.move(xpos[i+1])
-    return tb
+
