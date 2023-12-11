@@ -7,7 +7,7 @@ from Board import TicTacToeBoard
 
 # Construct a T-Board object from a given board vector
 # The move history is also valid for the returned T-Board
-def boardFromPosition(vec):
+def makeBoardFromPosition(vec):
     tb = TicTacToeBoard()
     xpos = np.nonzero(vec==tb.Xmark)[0]
     ypos = np.nonzero(vec==tb.Ymark)[0]
