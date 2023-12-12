@@ -138,9 +138,9 @@ class TicTacToeBoard:
         
         
     def __eq__(self, other):
-        ret =   (self.board == other.board) and \
-                (self.nextTurn == other.nextTurn) and \
-                (self.moveHistory == other.moveHistory)
+        ret =   (self.board == other.board).all() and \
+                (self.nextTurn == other.nextTurn) # and \
+                # (self.moveHistory == other.moveHistory)
         return ret
                 
     
