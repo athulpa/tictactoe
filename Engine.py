@@ -3,6 +3,9 @@ import numpy as np
 
 from Board import TicTacToeBoard
 from MiniMax import minimax
+from Encode import encode
+from Symmetry import newIndex, oldIndex
+from TableBase import TableBaseLookupError
 
 
 #        Base Class for all TicTacToe engines
@@ -25,20 +28,39 @@ class TicTacToeEngine:
         
         
     # Generate a random next move
-    def randomMove(self, tb:TicTacToeBoard):
+    def randomMove(self, tb : TicTacToeBoard):
         candidateMoves = tb.possibleNextMoves()
         if(len(candidateMoves)==0):
             msg = "The given board is already filled in call to randomMove()"
             raise ValueError(msg)
         else:
-            rndIdx = self.rng.integers(len(candidateMoves))
-            return candidateMoves[rndIdx]
+            return self.chooseAmongCandidates(candidateMoves, 'random')
+        
+    # A helper function 
+    def chooseAmongCandidates(self, candidateMoves, separateEqualsBy='random'):
+        if(separateEqualsBy not in ['random', 'leftmost', 'rightmost']):
+            msg = "Argument 'separateEqualsBy' in call to Engine.method() must " + \
+                    "either be left out or be one of " + \
+                    "['random', 'leftmost', 'rightmost']. " + \
+                    "Received '{}'".format(separateEqualsBy)
+            raise ValueError(msg)
+            
+        if(len(candidateMoves)==1):
+            return candidateMoves[0]
+        else:
+            if(separateEqualsBy=='leftmost'):
+                return candidateMoves[0]
+            elif(separateEqualsBy=='rightmost'):
+                return candidateMoves[-1]
+            elif(separateEqualsBy=='random'):
+                rndIdx = self.rng.integers(len(candidateMoves))
+                return candidateMoves[rndIdx]
 ###############################################################################
           
 
 
 
-#        Engine that uses the Mini-Max algorithm      
+#        Engine that uses the Saved TableBase
 ###############################################################################
 class MiniMaxEngine(TicTacToeEngine):
     
@@ -48,14 +70,7 @@ class MiniMaxEngine(TicTacToeEngine):
         
     # After running minimax(), pick the best move
     # Resolve ties as either first, last or random choice.
-    def bestMove(self, tb:TicTacToeBoard, separateEqualsBy='random'):
-        if(separateEqualsBy not in ['random', 'leftmost', 'rightmost']):
-            msg = "Argument 'separateEqualsBy' in call to bestMove() must " + \
-                    "either be left out or be one of " + \
-                    "['random', 'leftmost', 'rightmost']. " + \
-                    "Received '{}'".format(separateEqualsBy)
-            raise ValueError(msg)
-            
+    def bestMove(self, tb:TicTacToeBoard, separateEqualsBy='random'):            
         orig = tb
         tb = TicTacToeBoard(copyFrom=orig)
         
@@ -71,15 +86,40 @@ class MiniMaxEngine(TicTacToeEngine):
                     "Minimax scores: {}").format(tb.board, scores)
             raise RuntimeError(msg)
             
-        if(len(candidateMoves)==1):
-            return candidateMoves[0]
-        else:
-            if(separateEqualsBy=='leftmost'):
-                return candidateMoves[0]
-            elif(separateEqualsBy=='rightmost'):
-                return candidateMoves[-1]
-            elif(separateEqualsBy=='random'):
-                rndIdx = self.rng.integers(len(candidateMoves))
-                return candidateMoves[rndIdx]
+        return self.chooseAmongCandidates(candidateMoves, separateEqualsBy)
 ###############################################################################
-          
+
+
+
+
+#        Engine that uses the Mini-Max algorithm      
+###############################################################################
+class TableBaseEngine(TicTacToeEngine):
+    
+    def __init__(self, tableBase, randomSeed=None, rng=None):
+        super().__init__(randomSeed, rng)
+        self.tbase = tableBase
+        
+        
+    def bestMove(self, tb:TicTacToeBoard, separateEqualsBy='random'):
+        
+        if(separateEqualsBy not in ['random', 'leftmost', 'rightmost']):
+            msg = "Argument 'separateEqualsBy' in call to bestMove() must " + \
+                    "either be left out or be one of " + \
+                    "['random', 'leftmost', 'rightmost']. " + \
+                    "Received '{}'".format(separateEqualsBy)
+            raise ValueError(msg)
+        
+        N,op = encode(tb, useSymmetry=True)
+        try:
+            ls = self.tbase.lookup(N)
+        except TableBaseLookupError:
+            msg = "In call to TableBaseEngine.bestMove(), the position " +\
+                    "{}, encoded as {}, was not found in the tablebase."
+            msg = msg.format(tb.board, N)
+            raise TableBaseLookupError(msg)
+        
+        candidateMoves = [newIndex(i, op) for i in ls[1:]]
+        
+        return self.chooseAmongCandidates(candidateMoves, separateEqualsBy)
+###############################################################################                         
