@@ -43,7 +43,7 @@ class TicTacToeEngine:
 class MiniMaxEngine(TicTacToeEngine):
     
     def __init__(self, randomSeed=None, rng=None):
-        super(randomSeed, rng)        
+        super().__init__(randomSeed, rng)        
         
         
     # After running minimax(), pick the best move
@@ -81,4 +81,5 @@ class MiniMaxEngine(TicTacToeEngine):
             elif(separateEqualsBy=='random'):
                 rndIdx = self.rng.integers(len(candidateMoves))
                 return candidateMoves[rndIdx]
-###############################################################################                   
+###############################################################################
+          
