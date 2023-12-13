@@ -150,7 +150,7 @@ def loadSymmetryTable():
         _SymTable = np.load(loadPath, allow_pickle=False)
     except OSError:
         msg = "File does not exist while trying to " +\
-                "load the Symmetry Table from path: {}".format(_dataPathToSymTable)
+                "load the Symmetry Table from path: {}".format(loadPath)
         raise ValueError(msg)
     
     
