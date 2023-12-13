@@ -14,10 +14,9 @@ def makeBoardFromPosition(vec):
     
     lx,ly = len(xpos),len(ypos)
     if(lx>9 or ly>9 or lx<ly or lx>(ly+1)):
-        msg = "In makeBoardFromPosition({}), this board cannot arise from \
-                any legal sequence of moves in TicTacToe".format(vec)
-        e = ValueError(msg)
-        raise e
+        msg = "In makeBoardFromPosition({}), this board cannot ".format(vec) + \
+                " arise from any legal sequence of moves in TicTacToe"
+        raise ValueError(msg)
         
     i = -1 # for boards with only 1 move played (which will be for X). See the if-condition below.
     for i in range(len(ypos)):
