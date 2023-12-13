@@ -4,8 +4,10 @@ import numpy as np
 from Board import TicTacToeBoard
 from MiniMax import minimax
 
+
+#        Base Class for all TicTacToe engines
+###############################################################################
 class TicTacToeEngine:
-    
     # Constuctor accepts either an RNG or a seed value
     def __init__(self, randomSeed=None, rng=None):
         if(rng is not None):
@@ -15,6 +17,33 @@ class TicTacToeEngine:
                 self.rng = np.random.default_rng(seed=randomSeed)
             else:
                 self.rng = np.random.default_rng()
+             
+    def bestMove(self, tb:TicTacToeBoard, separateEqualsBy='random'):
+        msg = "bestMove() is an abstract method for this class. " + \
+                "Must call this method on one of the child classes."
+        raise NotImplementedError(msg)
+        
+        
+    # Generate a random next move
+    def randomMove(self, tb:TicTacToeBoard):
+        candidateMoves = tb.possibleNextMoves()
+        if(len(candidateMoves)==0):
+            msg = "The given board is already filled in call to randomMove()"
+            raise ValueError(msg)
+        else:
+            rndIdx = self.rng.integers(len(candidateMoves))
+            return candidateMoves[rndIdx]
+###############################################################################
+          
+
+
+
+#        Engine that uses the Mini-Max algorithm      
+###############################################################################
+class MiniMaxEngine(TicTacToeEngine):
+    
+    def __init__(self, randomSeed=None, rng=None):
+        super(randomSeed, rng)        
         
         
     # After running minimax(), pick the best move
@@ -52,15 +81,4 @@ class TicTacToeEngine:
             elif(separateEqualsBy=='random'):
                 rndIdx = self.rng.integers(len(candidateMoves))
                 return candidateMoves[rndIdx]
-                    
-        
-    # Generate a random next move
-    def randomMove(self, tb:TicTacToeBoard):
-        candidateMoves = tb.possibleNextMoves()
-        if(len(candidateMoves)==0):
-            msg = "The given board is already filled in call to randomMove()"
-            raise ValueError(msg)
-        else:
-            rndIdx = self.rng.integers(len(candidateMoves))
-            return candidateMoves[rndIdx]
-        
+###############################################################################                   

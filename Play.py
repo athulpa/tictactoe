@@ -1,10 +1,10 @@
 
 
 from Board import TicTacToeBoard
-from Engine import TicTacToeEngine
+from Engine import MiniMaxEngine
 
 def startSimpleGame():
-    eng = TicTacToeEngine()
+    eng = MiniMaxEngine()
     tb = TicTacToeBoard()
     
     rsp = welcomeScreen()
