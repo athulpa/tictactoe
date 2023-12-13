@@ -66,7 +66,7 @@ def encode(tb : TicTacToeBoard, useSymmetry=True) -> int:
     if(useSymmetry is False):
         return N
     
-    return lookUpSymTable(N)[0]
+    return tuple(lookUpSymTable(N))
 
 # Decode a T-Board from an int
 def decode(N : int) -> TicTacToeBoard:
