@@ -21,9 +21,12 @@ class TicTacToeEngine:
     # Resolve ties as either first, last or random choice.
     def bestMove(self, tb:TicTacToeBoard, separateEqualsBy='random'):
         if(separateEqualsBy not in ['random', 'leftmost', 'rightmost']):
-            e = ValueError("Argument 'separateEqualsBy' in call to bestMove() must either be left our or be one of \
-                               ['random', 'leftmost', 'rightmost'] or left out. Received '{}'".format(separateEqualsBy))
-        
+            msg = "Argument 'separateEqualsBy' in call to bestMove() must " + \
+                    "either be left out or be one of " + \
+                    "['random', 'leftmost', 'rightmost']. " + \
+                    "Received '{}'".format(separateEqualsBy)
+            raise ValueError(msg)
+            
         orig = tb
         tb = TicTacToeBoard(copyFrom=orig)
         
@@ -35,8 +38,9 @@ class TicTacToeEngine:
         elif(np.any(scores==-1)):
             candidateMoves = np.nonzero(scores==-1)[0]
         else:
-            e = RuntimeError("The engine found no valid moves. Board: {},  Minimax scores: {}".format(tb.board, scores))
-            raise e
+            msg = ("The engine found no valid moves. Board: {}, " + \
+                    "Minimax scores: {}").format(tb.board, scores)
+            raise RuntimeError(msg)
             
         if(len(candidateMoves)==1):
             return candidateMoves[0]
@@ -54,8 +58,8 @@ class TicTacToeEngine:
     def randomMove(self, tb:TicTacToeBoard):
         candidateMoves = tb.possibleNextMoves()
         if(len(candidateMoves)==0):
-            e = ValueError("The given board is filled in call to randomMove()")
-            raise e
+            msg = "The given board is already filled in call to randomMove()"
+            raise ValueError(msg)
         else:
             rndIdx = self.rng.integers(len(candidateMoves))
             return candidateMoves[rndIdx]
