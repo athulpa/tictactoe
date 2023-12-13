@@ -9,18 +9,16 @@ from Board import TicTacToeBoard
 # returned value is an array of 9 elements where:
     # arr[i] = 1,       if playing position 'i' will lead to a forced win.
     # arr[i] = -1,       if playing position 'i' will lead to a loss with best play from opponent
-    # arr[i] = 8,   if playing position 'i' is an illegal move (it's already filled with X or 0)
     # arr[i] = 0,   if playing position 'i' will lead to open-ended result
-def minimax(tb:TicTacToeBoard, myMark, otherMark):
-    #assert myMark == tb.nextTurn
+    # arr[i] = 8,   if playing position 'i' is an illegal move (it's already filled with X or 0)
+def minimax(tb : TicTacToeBoard, myMark, otherMark):
     
     ret  = np.zeros(9, dtype=np.int8)
     ret[:] = 8
     
     nextMoves = tb.possibleNextMoves()
-    
     for mv in nextMoves:
-        #l = len(tb.moveHistory)
+        
         tb.move(mv)
         
         if(tb.checkWin()==myMark):
@@ -38,10 +36,38 @@ def minimax(tb:TicTacToeBoard, myMark, otherMark):
             else:
                 ret[mv] = 0
         tb.undoLastMove()
-        #assert len(tb.moveHistory)==l
-        
+
     return ret
 
+
+def minimaxAllContinuations(tb : TicTacToeBoard, myMark, otherMark):
+    ret = np.zeros(9, dtype=np.int8)
+    ret[:] = 8
+    
+    nextMoves = tb.possibleNextMoves()
+    for mv in nextMoves:
+        
+        tb.move(mv)
+        if(tb.checkWin() == myMark):
+            ret[mv] = 1
+        else:
+            remMoves = tb.possibleNextMoves()
+            if(remMoves.size>0):
+                for Y in minimaxAllContinuations(tb, otherMark, myMark):
+                    yield Y
+                Z = Y[1]
+                if(np.any(Z[remMoves]==1)):
+                    ret[mv] = -1
+                elif(np.all(Z[remMoves]==-1)):
+                    ret[mv] = 1
+                else:
+                    ret[mv] = 0
+            else:
+                ret[mv] = 0
+        tb.undoLastMove()
+        
+    yield tb,ret
+            
 
 # Show for each of the remaining moves, what result it'll lead to with best play
 # Calls minimax() internally
