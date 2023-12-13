@@ -27,6 +27,15 @@ def makeBoardFromPosition(vec):
     return tb
 
 
+
+# Construct a T-Borad object from a given board vector when that 
+# ... vector's position cannot be reached from any legal game.
+def makeBoardFromIllegalPosition(vec):
+    tb = TicTacToeBoard()
+    tb.board = vec
+    return tb
+    
+    
 # Given a T-Board object, generate all of the possible positions that can follow from it.
 # Returns a generator object that yields each position one-by-one.
 # May modify the input board in-place during the generation, but leaves it as-is by the end.
