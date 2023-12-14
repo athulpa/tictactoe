@@ -40,6 +40,13 @@ def minimax(tb : TicTacToeBoard, myMark, otherMark):
     return ret
 
 
+# Run the minimax algorithm, but produce the results of all evaluations in the position tree
+# Yields (tb,Z) for every position checked in the tree of next positions
+#       tb: The TicTacToeBoard
+#       Z : The minimax vector evaluation of the position tb
+# Does not yield evaluations for a position that is won
+# The last pair (tb,Z) yielded will correspond to the input position to the fn.
+
 def minimaxAllContinuations(tb : TicTacToeBoard, myMark, otherMark):
     ret = np.zeros(9, dtype=np.int8)
     ret[:] = 8

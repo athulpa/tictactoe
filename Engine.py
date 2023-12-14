@@ -4,7 +4,7 @@ import numpy as np
 from Board import TicTacToeBoard
 from MiniMax import minimax
 from Encode import encode
-from Symmetry import newIndex, oldIndex
+from Symmetry import newIndex
 from TableBase import TableBaseLookupError
 
 

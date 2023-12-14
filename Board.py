@@ -29,8 +29,8 @@ class TicTacToeBoard:
 
 #                CLASS PROPETIES
 #######################################################
-    Xmark = 1
-    Ymark = 2
+    Xmark = 1   # must never be set to 0
+    Ymark = 2   # must never be set to 0
     
     WinPatterns = [
                     slice(0,3),         # row 1
@@ -47,8 +47,8 @@ class TicTacToeBoard:
     
     # Checks if anyone has won the game.
     # Returns Xmark/Ymark if either player won, otherwise returns 0.
-    # If the position is illegal (i.e. more than 1 3-in-a-row reached),
-    # ... then the return value may be either player.
+    # If the position is illegal with more than 1 instance of a 3-in-a-row, then
+    #   ... the output may be either player depending on whose 3-in-a-row is found first
     def checkWin(self):
         
         # If less than 5 moves have been made => no winner.
@@ -86,7 +86,7 @@ class TicTacToeBoard:
             msg = msg.format(pos, val, pos)
             raise ValueError(msg)
             
-        
+    # Uses self.moveHistory to reset the board to its state before the most recent move.
     def undoLastMove(self):
         lpos = self.moveHistory.pop()
         self.board[lpos] = 0

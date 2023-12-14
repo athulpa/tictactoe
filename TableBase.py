@@ -29,6 +29,8 @@ from Encode import encode
 #       Importing this name should be avoided; hence functions outside this module
 #         ... cannot access/modify this variable.
 _dataPathToDefaultTableBases = None
+_AvailabeTableBases = None
+
 
 def _getDataPathToDefaultTableBases():
     global _dataPathToDefaultTableBases
@@ -110,15 +112,17 @@ def calcTableBase_MiniMax():
 # Out of the default table bases in _dataPthtoDefaultTableBases,
 #   ... load the ones that are available on the current system.
 def getAvailableTableBases():
-    tbPaths = _getDataPathToDefaultTableBases()
-    TableBases = {}
-    for tbName in tbPaths.keys():
-        try:
-            tb = TableBase()
-            tb.load(tbPaths[tbName])
-            TableBases[tbName] = tb
-        except FileNotFoundError:
-            continue
+    global _AvailabeTableBases
+    if(_AvailabeTableBases is None):
+        tbPaths = _getDataPathToDefaultTableBases()
+        _AvailabeTableBases = {}
+        for tbName in tbPaths.keys():
+            try:
+                tb = TableBase()
+                tb.load(tbPaths[tbName])
+                _AvailabeTableBases[tbName] = tb
+            except FileNotFoundError:
+                continue
      
-    return TableBases
+    return _AvailabeTableBases
     
