@@ -1,13 +1,30 @@
 
+import os
+import json
+
 from Board import TicTacToeBoard
 from TableBase import getAvailableTableBases
-from Engine import TableBaseEngine
-from Engine import MiniMaxEngine
+from Engine import TableBaseEngine, MiniMaxEngine
+from  Helper import moduleDir
+
+
+#                   Module-Scoped variable
+##################################################################
+_pathToSettingsFile = None
+
+def _getPathToSettingsFile():
+    global _pathToSettingsFile
+    if(_pathToSettingsFile is None):
+        dirName = moduleDir(__file__)
+        _pathToSettingsFile = os.path.join(dirName, 'data', 'repl-settings-1.txt')
+    return _pathToSettingsFile
+##################################################################
+
 
 def startGame():
     welcomeScreen()
     
-    settings = {
+    defaultSettings = {
                  "name1"   : "",
                  "name2"   : "",
                  "marker1" : "X",
@@ -15,10 +32,17 @@ def startGame():
                  "useTB"   : True
                }
     
+    settings = tryToLoadSettings(default=defaultSettings)
+    
+    
+    prevSettings = settings.copy()
     rsp = getSettings(settings, enableQuit=True, tryCnt=0)
     if(rsp == -1):
         exitMessage()
         return
+    
+    if(settings != prevSettings):
+        tryToSaveSettings(settings)
     
     rsp = getPlayers(settings, enableQuit=True)
     if(rsp==-1):
@@ -26,8 +50,6 @@ def startGame():
         return
     else:
         (p1,p2) = rsp
-        
-    tb = TicTacToeBoard()
     
     if('c' in (p1,p2)):
         if(settings['useTB']):
@@ -39,6 +61,8 @@ def startGame():
     if(resp.strip().lower()=='q'):
         exitMessage()
         return
+    
+    tb = TicTacToeBoard()
     
     drawBoard(tb, settings, pre='\n')
     
@@ -84,6 +108,25 @@ def exitMessage():
     print("Exiting . . .")
     print()
     
+    
+def tryToLoadSettings(default):
+    path = _getPathToSettingsFile()
+    try:
+        with open(path, "r") as jfile:
+            ret = json.load(jfile)
+    except (OSError, json.JSONDecodeError):
+        return default
+    else:
+        return ret
+
+def tryToSaveSettings(settings):
+    path = _getPathToSettingsFile()
+    try:
+        with open(path, "w") as jfile:
+            json.dump(settings, jfile)
+    except OSError:
+        pass
+    
 
 def makeTableBaseEngine():
     atb = getAvailableTableBases()
@@ -104,7 +147,7 @@ def drawBoard(tb:TicTacToeBoard, settings, pre='\n', end='\n'):
     
     dispName1 = (settings['name1'] if (settings['name1']!='') else "Player 1")
     dispName2 = (settings['name2'] if (settings['name2']!='') else "Player 2")
-    toMoveLine = "Next: "
+    toMoveLine = "Next Turn: "
     toMoveLine += (dispName1 if(tb.nextTurn==tb.Xmark) else dispName2)
     toMoveLine += " (" + (settings['marker1'] if (tb.nextTurn==tb.Xmark) else settings['marker2']) + ")"
     toMoveLine +=  '\n'
@@ -172,10 +215,10 @@ def getSettings(settings, enableQuit = True, tryCnt = 0):
             if(resp!=''):
                 settings['marker2'] = resp[0]
             
-            resp = input("Computer uses a tablebase to speed up its moves (Y/n): ").strip()
+            resp = input("Should the computer use a tablebase to speed up its moves (Y/n): ").strip()
             if(enableQuit is True and resp.lower()=='q'):
                 return -1
-            settings['useTB'] = (resp.lower()!='n')
+            settings['useTB'] = (resp.lower()!='n' and resp.lower()!='no')
             
             print()
             
