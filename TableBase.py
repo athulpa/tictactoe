@@ -63,13 +63,14 @@ class TableBase:
         
     def lookup(self, idx):
         if(self.table is None):
-            msg = ''
+            msg = 'No table set in the TableBase object. Use setTable() or load() methods to add a table.'
             raise RuntimeError(msg)
         try:
             return self.table[idx]
         except (KeyError,IndexError,TypeError):
-            msg = ''
-            raise ValueError(msg)
+            msg = 'In call to TableBase.lookup({}), the index is either not a valid integer' + \
+                    " or wasn't found in this tablebase"
+            raise TableBaseLookupError(msg)
             
     def save(self, fpath):
         with open(fpath, "w") as jfile:
