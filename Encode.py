@@ -4,7 +4,7 @@ import numpy as np
 
 from Board import TicTacToeBoard
 from Symmetry import transformVec, allVectorVariants
-from Helper import makeBoardFromIllegalPosition
+from Helper import makeBoardFromIllegalPosition, moduleDir
 
 
 #       Simple Encoding/Decoding functions
@@ -104,7 +104,7 @@ def _getDataPathToSymTable():
         # Set it as the path to the file "SymTable.npy" 
         #    ... in the folder {project root}/data
         import Board
-        temp = os.path.dirname(Board.__file__)  # gets the {project root 'dir'}
+        temp = moduleDir(Board.__file__)  # gets the {project root 'dir'}
         _dataPathToSymTable = os.path.join(temp, 'data', 'SymTable.npy')
     
     return _dataPathToSymTable

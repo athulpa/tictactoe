@@ -1,5 +1,6 @@
 
 import numpy as np
+import os
 
 from Board import TicTacToeBoard
 ## Contains misc. functions that don't belong in other files
@@ -63,3 +64,11 @@ def generateAllPossiblePositions():
             yield ret
         except ValueError:
             continue
+        
+        
+    
+# Gets the absoute path on the current system to a given module
+# The input must be the __file__ attribute of that module
+def moduleDir(fileVariable):
+    return os.path.dirname(fileVariable)
+    
