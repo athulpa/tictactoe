@@ -55,7 +55,7 @@ def startGame():
         if(settings['useTB']):
             eng = makeTableBaseEngine()
         else:
-            eng = MiniMaxEngine()
+            eng = MiniMaxEngine(pruning=True)
         
     resp = input("\nPress ENTER to start the game ...")
     if(resp.strip().lower()=='q'):
