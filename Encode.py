@@ -4,7 +4,7 @@ import numpy as np
 
 from Board import TicTacToeBoard
 from Symmetry import transformVec, allVectorVariants
-from Helper import makeBoardFromIllegalPosition, moduleDir
+from Helper import makeBoardFromPosition, makeBoardFromIllegalPosition, moduleDir
 
 
 #       Simple Encoding/Decoding functions
@@ -12,8 +12,11 @@ from Helper import makeBoardFromIllegalPosition, moduleDir
 def _encodeBoardAsInteger(tb : TicTacToeBoard) -> int:
     return np.sum(tb.board*(3**np.arange(9)))
 
-def _decodeBoardFromInteger(N : int) -> TicTacToeBoard:
-    return makeBoardFromIllegalPosition((N//3**(np.arange(9)))%3)
+def _decodeBoardFromInteger(N : int, allowIllegal=False) -> TicTacToeBoard:
+    if(allowIllegal is True):
+        return makeBoardFromIllegalPosition(_decodeVectorFromInteger(N))
+    else:
+        return makeBoardFromPosition(_decodeVectorFromInteger(N))
 
 def _encodeVectorAsInteger(vec):
     return np.sum(vec*(3**np.arange(9)))
