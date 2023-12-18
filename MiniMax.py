@@ -38,7 +38,7 @@ def minimax(tb : TicTacToeBoard):
     
 
 # Same output as the minimax() function but faster because it prunes the recursion tree
-def minimax_prune(tb : TicTacToeBoard, cnt=0):
+def minimax_AlphaBetaPruning(tb : TicTacToeBoard, parentFoundADraw=False):
     cW = tb.checkWin()
     if(cW == tb.Xmark):
         return 1
@@ -49,14 +49,14 @@ def minimax_prune(tb : TicTacToeBoard, cnt=0):
     if(len(nextMoves) == 0):
         return 0
     
-    drawPossible = False
+    foundADraw = False
     for mv in nextMoves:
         tb.move(mv)
-        Z = minimax_prune(tb)
+        Z = minimax_AlphaBetaPruning(tb, foundADraw)
         tb.undoLastMove()
         
         if(Z==0):
-            drawPossible = True
+            foundADraw = True
         
         # When the next player can win
         if(tb.nextTurn == tb.Xmark and (Z == 1)):
@@ -64,13 +64,18 @@ def minimax_prune(tb : TicTacToeBoard, cnt=0):
         if(tb.nextTurn == tb.Ymark and (Z == -1)):
             return -1
         
+        if(Z==0):
+            foundADraw = True
+            if(parentFoundADraw):
+                return 0
+            
     # When the next player can't win but can draw
-    if(drawPossible):
+    if(foundADraw):
         return 0
     
     # When the next player can't win or draw
-    return (    (-1) if (tb.nextTurn == tb.Xmark) else (1)    )
-
+    return (    (-1) if (tb.nextTurn == tb.Xmark) else (1)  )
+    
 
 
 # Return the minimax() evaluations for all moves of the given board
@@ -84,7 +89,7 @@ def minimaxEvalsForNextMoves(tb, pruning=True):
             tb.move(i)
             
             if(pruning):
-                ret[i] = minimax_prune(tb)
+                ret[i] = minimax_AlphaBetaPruning(tb)
             else:
                 ret[i] = minimax(tb)
                 
