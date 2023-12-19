@@ -35,49 +35,52 @@ def minimax(tb : TicTacToeBoard):
         return -1
     if(tb.nextTurn == tb.Ymark):
         return 1
-    
+        
 
 # Same output as the minimax() function but faster because it prunes the recursion tree
-def minimax_AlphaBetaPruning(tb : TicTacToeBoard, parentFoundADraw=False):
+def minimax_AlphaBetaPruning(tb : TicTacToeBoard, XfoundADraw=False, YfoundADraw=False, cnt=0):
     cW = tb.checkWin()
     if(cW == tb.Xmark):
-        return 1
+        return 1,cnt
     elif(cW == tb.Ymark):
-        return -1
+        return -1,cnt
 
     nextMoves = tb.possibleNextMoves()
     if(len(nextMoves) == 0):
-        return 0
+        return 0,cnt
     
-    foundADraw = False
     for mv in nextMoves:
         tb.move(mv)
-        Z = minimax_AlphaBetaPruning(tb, foundADraw)
+        Z,cnt = minimax_AlphaBetaPruning(tb, XfoundADraw = XfoundADraw, 
+                                          YfoundADraw = YfoundADraw, cnt=cnt+1)
         tb.undoLastMove()
         
-        if(Z==0):
-            foundADraw = True
-        
-        # When the next player can win
-        if(tb.nextTurn == tb.Xmark and (Z == 1)):
-            return 1
-        if(tb.nextTurn == tb.Ymark and (Z == -1)):
-            return -1
-        
-        if(Z==0):
-            foundADraw = True
-            if(parentFoundADraw):
-                return 0
+        if(tb.nextTurn == tb.Xmark):
+            if(Z == 1):
+                return 1,cnt
+            elif(Z == 0):
+                if(YfoundADraw):
+                    return 0,cnt
+                XfoundADraw = True
             
-    # When the next player can't win but can draw
-    if(foundADraw):
-        return 0
+        if(tb.nextTurn == tb.Ymark):
+            if(Z == -1):
+                return -1,cnt
+            elif(Z == 0):
+                if(XfoundADraw):
+                    return 0,cnt
+                YfoundADraw = True
     
-    # When the next player can't win or draw
-    return (    (-1) if (tb.nextTurn == tb.Xmark) else (1)  )
+    if(tb.nextTurn == tb.Xmark and XfoundADraw):
+        return 0,cnt
+    if(tb.nextTurn == tb.Ymark and YfoundADraw):
+        return 0,cnt
     
-
-
+    if(tb.nextTurn == tb.Xmark):
+        return -1,cnt
+    else:
+        return 1,cnt
+        
 # Return the minimax() evaluations for all moves of the given board
 # Returns an array 'arr' such that for all positions 'i' in [0-8],
 #       arr[i] is the evaluation of the board after playing the next move at 'i'
@@ -89,7 +92,7 @@ def minimaxEvalsForNextMoves(tb, pruning=True):
             tb.move(i)
             
             if(pruning):
-                ret[i] = minimax_AlphaBetaPruning(tb)
+                ret[i] = minimax_AlphaBetaPruning(tb)[0]
             else:
                 ret[i] = minimax(tb)
                 
