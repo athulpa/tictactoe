@@ -66,9 +66,32 @@ def generateAllPossiblePositions():
             continue
         
         
+#   Helper fns related to project folder paths
+########################################################
     
+# Module-scoped variables
+###########################
+_projectRootDir = None
+###########################
+
 # Gets the absoute path on the current system to a given module
 # The input must be the __file__ attribute of that module
 def moduleDir(fileVariable):
     return os.path.dirname(fileVariable)
     
+# Find the root directory of the project
+# Used by other modules for loading their data from files
+def getPojectRootDir():
+    global _projectRootDir
+    if(_projectRootDir is None):
+        import Board
+        _projectRootDir = moduleDir(Board.__file__)
+    return _projectRootDir
+
+# Make datapaths that start from the project root (in the style of to os.path.join)
+# Give *arg, where arg[i] is a folder/file inside the folder arg[i-1]
+def extendRootPath(*names):
+    rootPath = getPojectRootDir()
+    return os.path.join(rootPath, *names)
+########################################################
+        

@@ -7,7 +7,7 @@ import tqdm
 from Board import TicTacToeBoard
 from MiniMax import minimaxAllContinuations
 from Encode import encode
-from Helper import moduleDir
+from Helper import extendRootPath
 
 
 #              TableBase Concept
@@ -38,10 +38,8 @@ def _getDataPathToDefaultTableBases():
     
     if(_dataPathToDefaultTableBases is None):
         # Set it as a dict with paths to all the tablebases
-        import Board
-        rootDir = moduleDir(Board.__file__)  # gets the {project root 'dir'}
         _dataPathToDefaultTableBases = {
-                    'minimax-1' : os.path.join(rootDir, 'data', 'TableBase_MiniMax-1.json')
+                    'minimax-1' : extendRootPath('data', 'TableBase_MiniMax-1.json')
                     }
     
     return _dataPathToDefaultTableBases

@@ -1,11 +1,10 @@
 
-import os
 import json
 
 from Board import TicTacToeBoard
 from TableBase import getAvailableTableBases
 from Engine import TableBaseEngine, MiniMaxEngine
-from  Helper import moduleDir
+from Helper import extendRootPath
 
 
 #                   Module-Scoped variable
@@ -15,8 +14,7 @@ _pathToSettingsFile = None
 def _getPathToSettingsFile():
     global _pathToSettingsFile
     if(_pathToSettingsFile is None):
-        dirName = moduleDir(__file__)
-        _pathToSettingsFile = os.path.join(dirName, 'data', 'repl-settings-1.txt')
+        _pathToSettingsFile = extendRootPath('data', 'repl-settings-1.txt')
     return _pathToSettingsFile
 ##################################################################
 
