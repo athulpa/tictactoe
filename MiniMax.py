@@ -2,6 +2,7 @@
 import numpy as np
 
 from Board import TicTacToeBoard
+from MachineCode import run_minimax, MachineCodeLoadingError, MachineCodeMissingError, MachineCodeRuntimeError
 
 
 # Returns the evaluation of the current position 
@@ -82,20 +83,33 @@ def minimax_AlphaBetaPruning(tb : TicTacToeBoard, XfoundADraw=False, YfoundADraw
         return 1,cnt
         
 # Return the minimax() evaluations for all moves of the given board
+# If pruning = True, uses alphabeta pruning for speedup
+# If tryNative = True, uses machine code library if available
+#       If forceNative = False, switches to python code if machine code isn't working
+#       If forceNative = True, errors out if machine code isn't working
 # Returns an array 'arr' such that for all positions 'i' in [0-8],
 #       arr[i] is the evaluation of the board after playing the next move at 'i'
 #       arr[i] is 8 if the next move can't be played at 'i'
-def minimaxEvalsForNextMoves(tb, pruning=True):
+def minimaxEvalsForNextMoves(tb, pruning=True, tryNative=True, forceNative=False):
     ret = np.zeros(shape=9, dtype=np.int8) + 8
     for i in range(9):
         if(i in tb.possibleNextMoves()):
             tb.move(i)
             
-            if(pruning):
-                ret[i] = minimax_AlphaBetaPruning(tb)[0]
-            else:
-                ret[i] = minimax(tb)
-                
+            if(tryNative is True):   # Go for machine code implementation of minimax
+                try:
+                    ret[i] = run_minimax(tb, pruning=pruning)[0]
+                except (MachineCodeMissingError, MachineCodeLoadingError, MachineCodeRuntimeError) as e:
+                    if(forceNative):
+                        raise e
+                    else:
+                        tryNative = False
+            else:                    # Stick to python implementation of minimax
+                if(pruning):
+                    ret[i] = minimax_AlphaBetaPruning(tb)[0]
+                else:
+                    ret[i] = minimax(tb)
+                    
             tb.undoLastMove()
 
     return ret

@@ -66,9 +66,11 @@ class TicTacToeEngine:
 ###############################################################################
 class MiniMaxEngine(TicTacToeEngine):
     
-    def __init__(self, pruning=True, randomSeed=None, rng=None):
+    def __init__(self, randomSeed=None, rng=None, pruning=True, useMachineCode=True, forceMachineCode=False):
         super().__init__(randomSeed, rng)        
         self.pruning = pruning
+        self.useMachineCode = useMachineCode
+        self.forceMachineCode = forceMachineCode
       
         
     # Use the minimax algorithm (w/ or w/o pruning) to find all the moves
@@ -78,7 +80,13 @@ class MiniMaxEngine(TicTacToeEngine):
         orig = tb
         tb = TicTacToeBoard(copyFrom=orig)
         
-        scores = minimaxEvalsForNextMoves(tb, pruning=self.pruning)
+        scores = minimaxEvalsForNextMoves(
+                                            tb,
+                                            pruning=self.pruning,
+                                            tryNative = self.useMachineCode,
+                                            forceNative = self.forceMachineCode
+                                          )
+        
         
         winningScore = (1 if(tb.nextTurn==tb.Xmark) else -1)
         losingScore = (-1 if(tb.nextTurn==tb.Xmark) else 1)

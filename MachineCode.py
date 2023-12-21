@@ -14,7 +14,7 @@ class MachineCodeMissingError(FileNotFoundError):
     pass
 
 # Thrown if the .dll/.so file can't be loaded by the python process
-class MachineCodeLoadingError():
+class MachineCodeLoadingError(OSError):
     pass
 
 # Thrown if machine code fuction encounters a runtime error
