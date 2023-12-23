@@ -100,6 +100,8 @@ def welcomeScreen(enableQuit  = True):
     print("\nWELCOME TO TICTACTOE\n\n")
     print("Enter 'q' at any time to quit.")
     print()
+    print()
+    print()
         
 def exitMessage():
     print()
@@ -171,7 +173,7 @@ def getSettings(settings, enableQuit = True, tryCnt = 0):
         if(tryCnt==1):
             print(" **** Default Settings ****")
         else:
-            print(" **** Current Settings ****")
+            print(" **** Modified Settings ****")
             
         print("Player 1's Name:", settings['name1'])
         print("Player 2's Name:", settings['name2'])
@@ -179,7 +181,11 @@ def getSettings(settings, enableQuit = True, tryCnt = 0):
         print("Player 2's Marker:", settings['marker2'])
         print("Use a tablebase to speed up computer moves:", ('Yes' if settings['useTB'] else 'No'))
         print()
-        resp = input("Change any of these settings? (Y to change): ")
+        if(tryCnt==1):
+            resp = input("\nChange any of these settings? (Y to change): ")
+        else:
+            resp = input("\nAccept settings or change them again? (Y to change): ")
+        
         if(enableQuit is True and resp.strip().lower()=='q'):
             return -1
     
@@ -218,6 +224,10 @@ def getSettings(settings, enableQuit = True, tryCnt = 0):
                 return -1
             settings['useTB'] = (resp.lower()!='n' and resp.lower()!='no')
             
+            print()
+            print()
+            print()
+            print()
             print()
             
         else:
